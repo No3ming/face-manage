@@ -1,0 +1,10 @@
+version: '3.1'
+
+services:
+  web:
+    image: registry.cn-shenzhen.aliyuncs.com/yunzhimeng/source-manage-web:f0d0f27
+    ports:
+      - 23337:23337
+    environment:
+      - NGINX_LISTEN_PORT=23337
+      - VUE_APP_GRAPHQL_HTTP=http://39.108.107.106:4000/graphql

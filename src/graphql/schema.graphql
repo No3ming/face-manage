@@ -1,0 +1,82 @@
+input PostAddInput {
+  tags: [String!]!
+  title: String!
+  post: String!
+}
+
+input PostListInput {
+  title: String!
+  limit: Float!
+  offset: Float!
+}
+
+type PostType {
+  id: ID!
+  tags: [String!]!
+  title: String!
+  post: String!
+  createdAt: Float!
+  updatedAt: Float!
+  creator: UserType!
+}
+
+input PostUpdateInput {
+  tags: [String!]!
+  title: String!
+  post: String!
+  id: ID!
+}
+
+input AuthInput {
+  username: String!
+  password: String!
+}
+
+type AuthType {
+  access_token: String!
+}
+
+type Mutation {
+  createPost(input: PostAddInput!): PostType!
+  updatePost(input: PostUpdateInput!): PostType!
+  deletePost(id: String!): String!
+  createTag(input: TagAddInput!): TagType!
+  updateTag(input: TagUpdateInput!): TagType!
+}
+
+type Query {
+  login(user: AuthInput!): AuthType!
+  findOnePost(id: String!): PostType!
+  findPosts(input: PostListInput!): [PostType!]!
+  findOneTag(id: String!): TagType!
+  findTags(input: TagListInput!): [TagType!]!
+}
+
+input TagAddInput {
+  name: String!
+}
+
+input TagListInput {
+  name: String!
+  limit: Float!
+  offset: Float!
+}
+
+type TagType {
+  id: ID!
+  name: String!
+  createdAt: Float!
+  updatedAt: Float!
+  creator: UserType!
+}
+
+input TagUpdateInput {
+  name: String!
+  id: ID!
+}
+
+type UserType {
+  id: ID!
+  username: String!
+}
+

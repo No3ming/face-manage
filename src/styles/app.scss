@@ -1,0 +1,11 @@
+.v-application code {
+    background: none;
+    box-shadow: none;
+    code, kbd {
+        &::before,&:after {
+            content: "";
+            letter-spacing: -1px;
+        }
+    }
+
+  }
