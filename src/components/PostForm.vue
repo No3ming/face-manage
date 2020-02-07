@@ -5,7 +5,7 @@
       lazy-validation
     >
       <v-text-field
-        v-model="post.title"
+        v-model="value.title"
         :counter="100"
         :rules="nameRules"
         label="title"
@@ -13,7 +13,7 @@
       ></v-text-field>
 
       <v-select
-        v-model="post.tag.id"
+        v-model="value.tag.id"
         :items="tags"
         item-text="name"
         item-value="id"
@@ -80,32 +80,19 @@ export default Vue.extend({
   props: {
     value: Object
   },
-  data: (): data => ({
+  data: () => ({
     tags: [],
-    post: {
-      title: '',
-      tag: {
-        id: ''
-      },
-      push: false
-    },
     valid: false,
     nameRules: [
       (v: string) => !!v || 'title is required',
       (v: string) => (v && v.length <= 100) || 'Title must be less than 100 characters'
     ]
   }),
-  watch: {
-    value (value) {
-      console.log(value)
-      this.post = JSON.parse(JSON.stringify(value))
-    }
-  },
   methods: {
     onValidate () {
       const form: any = this.$refs.form
       if (form.validate()) {
-        this.$emit('on-ok', this.post)
+        this.$emit('on-ok', this.value)
       }
     }
   }

@@ -80,6 +80,7 @@ export default {
 <style lang="scss">
 .markdown-context {
     flex: 1;
+    width: 100%;
 }
 .markdown-body {
     height: 80vh;

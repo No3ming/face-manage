@@ -1,8 +1,8 @@
 <template>
   <v-container class="fill-height" fluid>
     <div class="markdown-context">
-      <post-form :value.sync="post" @on-ok="onOk"/>
-      <Markd :value.sync="post.post" />
+      <post-form v-model="post" @on-ok="onOk"/>
+      <Markd v-model="post.post" />
     </div>
   </v-container>
 </template>
@@ -63,7 +63,7 @@ export default {
     }
   },
   mounted () {
-
+    this.$apollo.queries.post.refetch()
   },
   methods: {
     async onOk (form) {
@@ -95,7 +95,6 @@ export default {
         })
         if (res.data) {
           this.tips('成功')
-          this.$router.replace('/post/list')
         }
       })
     },
@@ -106,6 +105,7 @@ export default {
 <style lang="scss">
 .markdown-context {
     flex: 1;
+    width: 100%;
 }
 .markdown-body {
     height: 80vh;

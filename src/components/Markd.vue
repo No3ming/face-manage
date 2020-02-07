@@ -1,5 +1,5 @@
 <template>
-  <mavon-editor v-model="v" @imgAdd="onImgAdd" @change="change" ref="mavon"/>
+  <mavon-editor :value.sync="value" @imgAdd="onImgAdd" @change="change" ref="mavon"/>
 </template>
 
 <script lang="ts">
@@ -12,16 +12,6 @@ export default Vue.extend({
   name: 'markd',
   props: {
     value: String
-  },
-  data: () => {
-    return {
-      v: ''
-    }
-  },
-  watch: {
-    value (value) {
-      this.v = value
-    }
   },
   methods: {
     async onImgAdd (pos: any, file: any) {
@@ -57,7 +47,7 @@ export default Vue.extend({
       })
     },
     change (value: any) {
-      this.$emit('update:value', value)
+      this.$emit('input', value)
     }
   }
 })
@@ -68,5 +58,9 @@ export default Vue.extend({
 }
 .markdown-body {
     height: 80vh;
+}
+
+.v-application code {
+  box-shadow: none;
 }
 </style>

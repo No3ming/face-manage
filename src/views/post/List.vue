@@ -99,7 +99,7 @@ export default {
     }
   },
   mounted () {
-    // this.$apollo.queries.list.startPolling(3000)
+    this.$apollo.queries.list.refetch()
   },
   methods: {
     onPage (n) {
