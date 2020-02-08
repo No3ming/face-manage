@@ -1,8 +1,8 @@
 <template>
   <v-container class="fill-height" fluid>
     <div class="markdown-context">
-      <post-form :value.sync="post" @on-ok="onOk"/>
-      <Markd :value.sync="post.post" />
+      <post-form v-model="post" @on-ok="onOk" @on-outline="onOutline" outline push name="文章"/>
+      <Markd v-model="post.post" />
     </div>
   </v-container>
 </template>
@@ -34,7 +34,8 @@ export default {
         creator: {
           id: '',
           username: ''
-        }
+        },
+        status: 0
       }
     }
   },
@@ -42,23 +43,32 @@ export default {
 
   },
   methods: {
-    async onOk (form) {
+    async onOk (form, cb) {
       const title = form.title
       const tag = form.tag.id
       const post = this.post.post
+      const status = form.status
       gqlError(async () => {
+        const quey = {}
         const res = await this.$apollo.mutate({
           mutation: gql`mutation ($input: PostAddInput!) {
             createPost(input: $input) {
               id
-              title
+              title,
+              tag {
+                id,
+                name
+              },
+              post,
+              status
             }
           }`,
           variables: {
             input: {
               title: title,
               tag: tag,
-              post: post
+              post: post,
+              status: status
             }
           },
           // 用结果更新缓存
@@ -68,9 +78,39 @@ export default {
           }
         })
         if (res.data) {
-          this.tips('成功')
-          this.$router.replace('/post/list')
+          cb ? cb(res.data.createPost) : this.$router.replace('/post/list')
         }
+      })
+    },
+    async onOutline (form) {
+      await this.onOk(form, (createPost) => {
+        gqlError(async () => {
+          const quey = {}
+          const res = await this.$apollo.mutate({
+            mutation: gql`mutation ($input: OutlineAddInput!) {
+            createOutline(input: $input) {
+              id
+              title,
+            }
+          }`,
+            variables: {
+              input: {
+                title: createPost.title,
+                tag: createPost.tag.id,
+                post: createPost.post,
+                postId: createPost.id
+              }
+            },
+            // 用结果更新缓存
+            // 查询将先通过乐观响应、然后再通过真正的变更结果更新
+            update (store, { data: { createOutline } }) {
+              return createOutline
+            }
+          })
+          if (res.data) {
+            this.$router.replace(`/outline/update/${res.data.createOutline.id}`)
+          }
+        })
       })
     },
     ...mapActions(['tips', 'login'])

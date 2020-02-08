@@ -90,10 +90,11 @@ export default Vue.extend({
         action: 'mdi-home',
         title: '文章',
         active: true,
-        group: 'post',
+        group: 'post|outline',
         items: [
           { title: '添加', path: '/post/add', active: false },
-          { title: '列表', path: '/post/list', active: false }
+          { title: '文章', path: '/post/list', active: false },
+          { title: '草稿', path: '/outline/list', active: false }
         ]
       },
       {

@@ -4,6 +4,7 @@
       v-model="valid"
       lazy-validation
     >
+      <h3>{{name}}</h3>
       <v-text-field
         v-model="value.title"
         :counter="100"
@@ -21,19 +22,23 @@
         label="tag"
         required
       ></v-select>
-
-      <!-- <v-checkbox
-        v-model="post.push"
-        label="是否发布?"
-      ></v-checkbox> -->
-
       <v-btn
+        v-show="push"
         :disabled="!valid"
         color="success"
         class="mr-4"
         @click="onValidate"
       >
-        提交
+        发布
+      </v-btn>
+      <v-btn
+        v-show="outline"
+        :disabled="!valid"
+        color="success"
+        class="mr-4"
+        @click="onSaveOutline"
+      >
+        保存草稿
       </v-btn>
       <p></p>
     </v-form>
@@ -78,7 +83,10 @@ export default Vue.extend({
     }
   },
   props: {
-    value: Object
+    value: Object,
+    outline: Boolean,
+    push: Boolean,
+    name: String
   },
   data: () => ({
     tags: [],
@@ -93,6 +101,12 @@ export default Vue.extend({
       const form: any = this.$refs.form
       if (form.validate()) {
         this.$emit('on-ok', this.value)
+      }
+    },
+    onSaveOutline () {
+      const form: any = this.$refs.form
+      if (form.validate()) {
+        this.$emit('on-outline', this.value)
       }
     }
   }

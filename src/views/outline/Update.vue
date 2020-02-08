@@ -1,7 +1,7 @@
 <template>
   <v-container class="fill-height" fluid>
     <div class="markdown-context">
-      <post-form v-model="post" @on-ok="onOk" @on-outline="onOutline" outline push name="文章"/>
+      <post-form v-model="post" @on-ok="onOk" @on-outline="onOutline" outline push name="草稿"/>
       <Markd v-model="post.post" />
     </div>
   </v-container>
@@ -25,7 +25,7 @@ export default {
   apollo: {
     post: {
       query: gql`query ($id: String!){
-          findOnePost(id: $id){
+          findOneOutline(id: $id){
             title,
             tag {
                 id
@@ -34,11 +34,12 @@ export default {
                 username,
                 id
             },
-            post
+            post,
+            postId
           }
         }
       `,
-      update: data => data.findOnePost,
+      update: data => data.findOneOutline,
       variables () {
         return {
           id: this.$route.params.id
@@ -71,22 +72,20 @@ export default {
       const title = form.title
       const tag = form.tag.id
       const post = this.post.post
-      const status = 1
+      const postId = this.post.postId
       gqlError(async () => {
         const res = await this.$apollo.mutate({
-          mutation: gql`mutation ($input: PostUpdateInput!) {
-            updatePost(input: $input) {
-              id
-              title
-            }
+          mutation: gql`mutation ($id: String!, $input: OutlineUpdateInput) {
+            pushOutline(id: $id, input: $input)
           }`,
           variables: {
+            id,
             input: {
               id,
+              postId,
               title,
               tag,
-              post,
-              status
+              post
             }
           },
           // 用结果更新缓存
@@ -101,25 +100,27 @@ export default {
       })
     },
     async onOutline (form) {
-      const id = this.$route.params.id
-      const title = form.title
-      const tag = form.tag.id
-      const post = this.post.post
       gqlError(async () => {
         const quey = {}
+        const id = this.$route.params.id
+        const title = form.title
+        const tag = form.tag.id
+        const post = this.post.post
+        const postId = this.post.postId
         const res = await this.$apollo.mutate({
-          mutation: gql`mutation ($input: OutlineAddInput!) {
-            createOutline(input: $input) {
+          mutation: gql`mutation ($input: OutlineUpdateInput!) {
+            updateOutline(input: $input) {
               id
               title,
             }
           }`,
           variables: {
             input: {
+              id,
               title,
               tag,
               post,
-              postId: id
+              postId
             }
           },
           // 用结果更新缓存
@@ -129,7 +130,7 @@ export default {
           }
         })
         if (res.data) {
-          this.$router.replace(`/outline/update/${res.data.createOutline.id}`)
+          this.tips('保存成功')
         }
       })
     },

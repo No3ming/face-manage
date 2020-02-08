@@ -10,17 +10,17 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>文章列表</v-toolbar-title>
+          <v-toolbar-title>草稿列表</v-toolbar-title>
           <v-btn @click="onReFatch" fab dark x-small color="primary">
             <v-icon dark >mdi-autorenew</v-icon>
           </v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="add">新增版本</v-btn>
+
         </v-toolbar>
       </template>
       <template v-slot:item.id="{item}">
         <div>
-          <router-link :to="`/post/update/${item.id}`">{{item.id}}</router-link>
+          <router-link :to="`/outline/update/${item.id}`">{{item.id}}</router-link>
         </div>
       </template>
       <template v-slot:item.createdAt="{item}">
@@ -35,7 +35,7 @@
       </template>
       <template v-slot:item.action="{item}">
         <div>
-          <router-link :to="`/post/update/${item.id}`">
+          <router-link :to="`/outline/update/${item.id}`">
             <v-icon color="primary">mdi-autorenew</v-icon>
           </router-link>
           <span style="margin: 0 10px"></span>
@@ -60,8 +60,8 @@ export default {
   components: {},
   apollo: {
     list: {
-      query: gql`query ($input: PostListInput!){
-          findPosts(input: $input){
+      query: gql`query ($input: OutlineListInput!){
+          findOutlines(input: $input){
             list {
               id,
               title,
@@ -72,7 +72,7 @@ export default {
           }
         }
       `,
-      update: data => data.findPosts,
+      update: data => data.findOutlines,
       variables () {
         return {
           input: {
@@ -108,14 +108,14 @@ export default {
       limit: 30
     }
   },
-  computed: {
-    pageCount () {
-      return Math.ceil((this.list.total || 0) / this.limit)
-    }
-  },
   filters: {
     format (value) {
       return value ? dayjs(value).format('YYYY-MM-DD hh:mm:ss') : ''
+    }
+  },
+  computed: {
+    pageCount () {
+      return Math.ceil((this.list.total || 0) / this.limit)
     }
   },
   mounted () {
@@ -132,15 +132,15 @@ export default {
       gqlError(async () => {
         const res = await this.$apollo.mutate({
           mutation: gql`mutation ($id: String!) {
-            deletePost(id: $id)
+            deleteOutline(id: $id)
           }`,
           variables: {
             id: item.id
           },
           // 用结果更新缓存
           // 查询将先通过乐观响应、然后再通过真正的变更结果更新
-          update (store, { data: { createPost } }) {
-            return createPost
+          update (store, { data: { deleteOutline } }) {
+            return deleteOutline
           }
         })
         if (res.data) {

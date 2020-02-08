@@ -35,6 +35,22 @@ const routes = [
     component: () => import(/* webpackChunkName: "postList" */ '../views/post/List.vue')
   },
   {
+    path: '/outline/update/:id',
+    name: 'add',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "outlineUpdate" */ '../views/outline/Update.vue')
+  },
+  {
+    path: '/outline/list',
+    name: 'list',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "outlineList" */ '../views/outline/List.vue')
+  },
+  {
     path: '/tag/list',
     name: 'list',
     // route level code-splitting
