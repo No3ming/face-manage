@@ -132,7 +132,9 @@ export default {
       gqlError(async () => {
         const res = await this.$apollo.mutate({
           mutation: gql`mutation ($id: String!) {
-            deletePost(id: $id)
+            deletePost(id: $id) {
+              id
+            }
           }`,
           variables: {
             id: item.id

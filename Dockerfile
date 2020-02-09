@@ -5,11 +5,12 @@
 # build stage
 FROM node:lts-alpine AS build-stage
 WORKDIR /app
-COPY package*.json ./
-RUN npm config set registry https://registry.npm.taobao.org
-RUN yarn
-COPY . .
-RUN npm run build
+# npm 太慢了，直接在当前环境打包好再使用
+COPY ./ ./
+# RUN npm config set registry https://registry.npm.taobao.org
+# RUN yarn
+# COPY . .
+# RUN npm run build
 
 # production stage
 FROM nginx:stable-alpine AS production-stage

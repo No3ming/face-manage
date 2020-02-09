@@ -132,7 +132,9 @@ export default {
       gqlError(async () => {
         const res = await this.$apollo.mutate({
           mutation: gql`mutation ($id: String!) {
-            deleteOutline(id: $id)
+            deleteOutline(id: $id) {
+              id
+            }
           }`,
           variables: {
             id: item.id

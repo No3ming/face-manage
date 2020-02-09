@@ -2,10 +2,12 @@ version: '3.1'
 
 services:
   web:
-    image: registry.cn-shenzhen.aliyuncs.com/lidongming/my/face-manage:6c222d8
+    image: registry.cn-shenzhen.aliyuncs.com/lidongming/my/face-manage:6e2a838
     ports:
       - 23337:23337
     environment:
       - NGINX_LISTEN_PORT=23337
-      - NGINX_SERVER_NAME=posts
+      - NGINX_SERVER_NAME=face-manage
+      - NGINX_API_PREFIX=/graphql
       - VUE_APP_GRAPHQL_HTTP=http://39.108.107.106:4000/graphql
+      - NGINX_API_PROXY_PASS=http://39.108.107.106:4000

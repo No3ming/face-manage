@@ -16,7 +16,7 @@ http {
   access_log  /var/log/nginx/access.log  main;
   sendfile        on;
   keepalive_timeout  65;
-
+  
   server {
     listen       ${NGINX_LISTEN_PORT};
     server_name  ${NGINX_SERVER_NAME};
@@ -26,6 +26,7 @@ http {
       index  index.html;
       try_files ${DOLLAR}uri ${DOLLAR}uri/ /index.html;
     }
+  
     location ^~ /login {
         root   /usr/share/nginx/html;
         index  login.html;
@@ -33,6 +34,9 @@ http {
     }
     location ~ ${NGINX_API_PREFIX} {
         proxy_pass ${NGINX_API_PROXY_PASS};
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade ${DOLLAR}http_upgrade;
+        proxy_set_header Connection "upgrade";
     }
 
     error_page   500 502 503 504  /50x.html;
