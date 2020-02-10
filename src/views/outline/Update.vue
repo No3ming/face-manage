@@ -2,7 +2,7 @@
   <v-container class="fill-height" fluid>
     <div class="markdown-context">
       <post-form v-model="post" @on-ok="onOk" @on-outline="onOutline" outline push name="草稿"/>
-      <Markd v-model="post.post" />
+      <Markd v-model="post.post" @on-save="onSave"/>
     </div>
   </v-container>
 </template>
@@ -132,6 +132,12 @@ export default {
         if (res.data) {
           this.tips('保存成功')
         }
+      })
+    },
+    async onSave (value) {
+      console.log(this.post)
+      this.onOutline({
+        ...this.post
       })
     },
     ...mapActions(['tips'])

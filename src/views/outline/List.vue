@@ -81,6 +81,14 @@ export default {
             offset: this.page - 1
           }
         }
+      },
+      error (err) {
+        console.log(err, 12312)
+        if (err.graphQLErrors.length && err.graphQLErrors[0].message.statusCode === 401) {
+          this.login()
+        } else {
+          this.tips(err.message)
+        }
       }
     }
   },
@@ -154,7 +162,7 @@ export default {
     onReFatch () {
       this.$apollo.queries.list.refetch()
     },
-    ...mapActions(['tips'])
+    ...mapActions(['tips', 'login'])
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <mavon-editor :value.sync="value" @imgAdd="onImgAdd" @change="change" ref="mavon"/>
+  <mavon-editor :value.sync="value" @imgAdd="onImgAdd" @change="change" @save="onSave" ref="mavon"/>
 </template>
 
 <script lang="ts">
@@ -48,6 +48,12 @@ export default Vue.extend({
     },
     change (value: any) {
       this.$emit('input', value)
+    },
+    onSave (value: any) {
+      this.$emit('input', value)
+      setTimeout(() => {
+        this.$emit('on-save', value)
+      })
     }
   }
 })

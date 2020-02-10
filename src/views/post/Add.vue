@@ -2,7 +2,7 @@
   <v-container class="fill-height" fluid>
     <div class="markdown-context">
       <post-form v-model="post" @on-ok="onOk" @on-outline="onOutline" outline push name="文章"/>
-      <Markd v-model="post.post" />
+      <Markd v-model="post.post" @on-save="onSave"/>
     </div>
   </v-container>
 </template>
@@ -111,6 +111,11 @@ export default {
             this.$router.replace(`/outline/update/${res.data.createOutline.id}`)
           }
         })
+      })
+    },
+    async onSave (value) {
+      this.onOutline({
+        ...this.post
       })
     },
     ...mapActions(['tips', 'login'])
