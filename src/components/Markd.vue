@@ -1,5 +1,5 @@
 <template>
-  <mavon-editor :value.sync="value" @imgAdd="onImgAdd" @change="change" @save="onSave" ref="mavon"/>
+  <mavon-editor :value.sync="value" :tabSize="4" @imgAdd="onImgAdd" @change="change" @save="onSave" ref="mavon"/>
 </template>
 
 <script lang="ts">
