@@ -57,6 +57,22 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "tag" */ '../views/tag/List.vue')
+  },
+  {
+    path: '/price/add',
+    name: 'add',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "priceAdd" */ '../views/price/Add.vue')
+  },
+  {
+    path: '/price/list',
+    name: 'list',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "priceIndex" */ '../views/price/List.vue')
   }
 ]
 

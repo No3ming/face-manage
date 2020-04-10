@@ -105,6 +105,15 @@ export default Vue.extend({
         items: [
           { title: '列表', path: '/tag/list', active: false }
         ]
+      },
+      {
+        action: 'mdi-tag',
+        title: '图片识别',
+        active: false,
+        group: 'price',
+        items: [
+          { title: '列表', path: '/price/list', active: false }
+        ]
       }
     ],
     drawer: true

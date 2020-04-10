@@ -1,32 +1,3 @@
-input PostAddInput {
-  tags: [String!]!
-  title: String!
-  post: String!
-}
-
-input PostListInput {
-  title: String!
-  limit: Float!
-  offset: Float!
-}
-
-type PostType {
-  id: ID!
-  tags: [String!]!
-  title: String!
-  post: String!
-  createdAt: Float!
-  updatedAt: Float!
-  creator: UserType!
-}
-
-input PostUpdateInput {
-  tags: [String!]!
-  title: String!
-  post: String!
-  id: ID!
-}
-
 input AuthInput {
   username: String!
   password: String!
@@ -39,17 +10,146 @@ type AuthType {
 type Mutation {
   createPost(input: PostAddInput!): PostType!
   updatePost(input: PostUpdateInput!): PostType!
-  deletePost(id: String!): String!
+  deletePost(id: String!): PostType!
   createTag(input: TagAddInput!): TagType!
   updateTag(input: TagUpdateInput!): TagType!
+  deleteTag(id: String!): String!
+  createOutline(input: OutlineAddInput!): OutlineType!
+  updateOutline(input: OutlineUpdateInput!): OutlineType!
+  deleteOutline(id: String!): OutlineType!
+  pushOutline(id: String!, input: OutlineUpdateInput): String!
+}
+
+type OssType {
+  url: String!
+}
+
+input OutlineAddInput {
+  tag: String!
+  title: String!
+  post: String!
+  postId: String
+  thumb: String
+  private: Boolean
+}
+
+input OutlineListInput {
+  tag: String
+  title: String
+  limit: Float
+  offset: Float
+}
+
+type OutlineType {
+  id: ID!
+  tag: TagType!
+  title: String!
+  post: String!
+  postId: String
+  createdAt: Float!
+  updatedAt: Float!
+  creator: UserType!
+  view: Float
+  thumb: String
+  private: Boolean
+}
+
+type OutlineTypeList {
+  list: [OutlineType!]!
+  total: Float!
+}
+
+input OutlineUpdateInput {
+  tag: String!
+  title: String!
+  post: String!
+  postId: String
+  thumb: String
+  private: Boolean
+  id: ID!
+}
+
+input PostAddInput {
+  tag: String!
+  title: String!
+  post: String!
+  thumb: String
+  private: Boolean
+  status: Float!
+}
+
+input PostListInput {
+  tag: String
+  title: String
+  limit: Float
+  offset: Float
+}
+
+type PostType {
+  id: ID!
+  tag: TagType!
+  title: String!
+  post: String!
+  createdAt: Float!
+  updatedAt: Float!
+  creator: UserType!
+  view: Float
+  thumb: String
+  private: Boolean
+  status: Float!
+}
+
+type PostTypeList {
+  list: [PostType!]!
+  total: Float!
+}
+
+input PostUpdateInput {
+  tag: String!
+  title: String!
+  post: String!
+  thumb: String
+  private: Boolean
+  status: Float!
+  id: ID!
+}
+
+input PriceAdd {
+  url: String!
+}
+
+input PriceListInput {
+  tag: String
+  limit: Float
+  offset: Float
+}
+
+type PriceTag {
+  value: String!
+  confidence: Float!
+}
+
+type PriceTagBody {
+  tags: [PriceTag!]!
+  img: String!
+}
+
+type PriceType {
+  list: [PriceTagBody!]!
+  total: Float!
 }
 
 type Query {
   login(user: AuthInput!): AuthType!
   findOnePost(id: String!): PostType!
-  findPosts(input: PostListInput!): [PostType!]!
+  findPosts(input: PostListInput!): PostTypeList!
   findOneTag(id: String!): TagType!
-  findTags(input: TagListInput!): [TagType!]!
+  findTags(input: TagListInput!): TagTypeList!
+  getPut(type: String!, name: String!): OssType!
+  findOneOutline(id: String!): OutlineType!
+  findOutlines(input: OutlineListInput!): OutlineTypeList!
+  addPrices(url: String!): PriceTagBody!
+  getPrices(input: PriceListInput!): PriceType!
 }
 
 input TagAddInput {
@@ -68,6 +168,11 @@ type TagType {
   createdAt: Float!
   updatedAt: Float!
   creator: UserType!
+}
+
+type TagTypeList {
+  list: [TagType!]!
+  total: Float!
 }
 
 input TagUpdateInput {
